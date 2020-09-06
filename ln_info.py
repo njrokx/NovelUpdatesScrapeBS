@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
-           }
+# headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
+#            }
 
 
 def getLNData(url, headers):
@@ -49,4 +49,4 @@ def getLNData(url, headers):
         print("Status in COO:", data_statuscoo)
 
 
-getLNData('https://www.novelupdates.com/series/100-things-i-dont-know-about-my-senior/', headers)
+# getLNData('https://www.novelupdates.com/series/100-things-i-dont-know-about-my-senior/', headers)
