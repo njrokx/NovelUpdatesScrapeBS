@@ -15,7 +15,7 @@ def getLNData(url, headers):
     # use .replace("\n"," ") instead of strip to prevent no spacing in case of two artist/author/publishers
     for data in link_data:
         data_type = data.find("a", {"class": "genre type"}).text
-        data_author = data.find("a", {"id": "authtag"}).text
+        data_author = data.find("div", {"id": "showauthors"}).findAll("a")
         data_artist = data.find(
             "div", {"id": "showartists"}).findAll("a")
         data_licensed = data.find(
@@ -28,7 +28,11 @@ def getLNData(url, headers):
         data_statuscoo = data.find(
             "div", {"id": "editstatus"}).text.strip()
         print("\nType:", data_type)
-        print("Author(s):", data_author)
+        if len(data_author) > 1:
+            print("Author(s):")
+            for authors in data_author:
+                author = authors.text
+                print(author, " ")
         if len(data_artist) > 1:
             print("Artist(s):")
             for artists in data_artist:
@@ -45,4 +49,4 @@ def getLNData(url, headers):
         print("Status in COO:", data_statuscoo)
 
 
-getLNData('https://www.novelupdates.com/series/10-nen-goshi-no-hikiniito-o-yamete-gaishutsushitara-jitaku-goto-isekai-ni-tenishiteta/', headers)
+getLNData('https://www.novelupdates.com/series/100-things-i-dont-know-about-my-senior/', headers)
