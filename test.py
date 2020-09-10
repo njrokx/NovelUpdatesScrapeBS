@@ -10,7 +10,7 @@ db = client.LNDB
 # need to have user agent
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
            }
-url = 'https://www.novelupdates.com/novelslisting/?sort=7&order=1&status=1&pg=1'
+url = 'https://www.novelupdates.com/novelslisting/?sort=7&order=1&status=1&pg=52'
 
 r = requests.get(url, headers=headers)
 
@@ -20,11 +20,11 @@ soup = BeautifulSoup(r.text, "lxml")
 results = soup.find("div", {"class": "w-blog-content other"})
 links = results.find_all("div", {"class": "search_main_box_nu"})
 
-# url = 'https://www.novelupdates.com/series/10-nen-goshi-no-hikiniito-o-yamete-gaishutsushitara-jitaku-goto-isekai-ni-tenishiteta/'
+# url = 'https://www.novelupdates.com/series/do-you-know-the-limits/'
 
-item_title = links[2].find("a").text
-item_href = links[2].find("a").attrs["href"]
-item_lang = links[2].find("span").text
+item_title = links[9].find("a").text
+item_href = links[9].find("a").attrs["href"]
+item_lang = links[9].find("span").text
 if item_title and item_href:
     print("Title:", item_title)
     print("Link:", item_href)
@@ -34,13 +34,13 @@ if item_title and item_href:
     pprint(data)
 
     # can use cursor.count() to get number of docs that matches the find()
-    curlist = list(cursor)
-    if len(curlist) == 0:
-        db.inventory.insert_one(data)
-        print("added data")
-    else:
-        db.inventory.update_one({"Title": item_title}, {"$set": data})
-        print("updated data")
+    # curlist = list(cursor)
+    # if len(curlist) == 0:
+    #     db.inventory.insert_one(data)
+    #     print("added data")
+    # else:
+    #     db.inventory.update_one({"Title": item_title}, {"$set": data})
+    #     print("updated data")
 
     if item_lang != 'JP':
         print("not Japanese")

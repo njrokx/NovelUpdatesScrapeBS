@@ -20,7 +20,10 @@ def getLNData(url, headers, title):
     link_data = link_result.find_all("div", {"class": "one-third"})
     # use .replace("\n"," ") instead of strip to prevent no spacing in case of two artist/author/publishers
     for data in link_data:
-        data_type = data.find("a", {"class": "genre type"}).text
+        try:
+            data_type = data.find("a", {"class": "genre type"}).text
+        except:
+            data_type = "Unknown"
         data_author = data.find("div", {"id": "showauthors"}).findAll("a")
         data_artist = data.find(
             "div", {"id": "showartists"}).findAll("a")
