@@ -5,6 +5,7 @@ from pymongo import MongoClient
 import time
 import random
 from pprint import pprint
+from delay import delay
 
 client = MongoClient(
     "mongodb://jock:Th1s1sAStr0ngPassw0rd@localhost:27017/admin?authSource=admin")
@@ -15,13 +16,13 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 url = 'https://www.novelupdates.com/novelslisting/?sort=7&order=1&status=1&pg=1'
 
 
-def delay():
-    print("running delay.\n")
-    time.sleep(random.uniform(15, 20))
-
+# def delay():
+#     print("running delay.\n")
+#     time.sleep(random.uniform(15, 20))
+next_page = True
 
 i = 1
-while i < 2:
+while next_page:
     print("Current page url:", url)
     r = requests.get(url, headers=headers)
 
@@ -57,16 +58,18 @@ while i < 2:
                     db.inventory.update_one(
                         {"Title": item_title}, {"$set": data})
                     print("updated data")
+                delay(1, 5)
     try:
         pages = soup.find("div", {"class": "digg_pagination"}).find(
             "a", {"class": "next_page"}).attrs["href"]
         url = "https:"+pages
         print("\nNext Page url:", url)
     except:
+        next_page = False
         print("No next page.")
 
     i += 1
-    delay()
+    delay(15, 20)
 
 
 # db path for running the mongodb server\
