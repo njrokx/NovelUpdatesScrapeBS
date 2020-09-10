@@ -13,7 +13,7 @@ db = client.LNDB
 # need to have user agent
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
            }
-url = 'https://www.novelupdates.com/novelslisting/?sort=7&order=1&status=1&pg=1'
+url = 'https://www.novelupdates.com/novelslisting/?sort=7&order=1&status=1&pg=52'
 
 
 # def delay():
@@ -21,7 +21,7 @@ url = 'https://www.novelupdates.com/novelslisting/?sort=7&order=1&status=1&pg=1'
 #     time.sleep(random.uniform(15, 20))
 next_page = True
 
-i = 1
+i = 52
 while next_page:
     print("Current page url:", url)
     r = requests.get(url, headers=headers)
