@@ -1,15 +1,17 @@
 from bs4 import BeautifulSoup
 import requests
 
-# headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
-#            }
-
 lnartist = []
 lnauthor = []
 lnopub = []
 
 
 def getLNData(url, headers, title):
+    # need to clear the list for the next entry
+    lnartist.clear()
+    lnauthor.clear()
+    lnopub.clear()
+
     link_r = requests.get(url, headers=headers)
     print("\nStatus:", link_r.status_code)
     link_soup = BeautifulSoup(link_r.text, "lxml")
@@ -32,27 +34,15 @@ def getLNData(url, headers, title):
         data_statuscoo = data.find(
             "div", {"id": "editstatus"}).text.strip()
 
-    print("\nType:", data_type)
-    # if len(data_author) > 1:
-    print("Author(s):")
     for authors in data_author:
         author = authors.text
         lnauthor.append(author)
-        print(author, " ")
-    print("Artist(s):")
     for artists in data_artist:
         artist = artists.text
         lnartist.append(artist)
-        print(artist, " ")
-    print("Licensed:", data_licensed)
-    print("Completely Translated:", data_comp_tl)
-    print("Original Publisher(s):")
     for opubs in data_ori_pub:
         opub = opubs.text
         lnopub.append(opub)
-        print(opub, " ")
-    print("English Publisher:", data_eng_pub)
-    print("Status in COO:", data_statuscoo)
     data = {"Title": title,
             "Type": data_type,
             "Author(s)": lnauthor,
@@ -63,6 +53,3 @@ def getLNData(url, headers, title):
             "English Publisher": data_eng_pub,
             "Status in COO": data_statuscoo}
     return data
-
-
-# getLNData('https://www.novelupdates.com/series/100-things-i-dont-know-about-my-senior/', headers)
