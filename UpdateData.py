@@ -13,6 +13,8 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
            }
 url = 'https://www.novelupdates.com/novelslisting/?sort=7&order=1&status=1&pg=1'
 
+genres = []
+
 next_page = True
 
 i = 1
@@ -29,30 +31,39 @@ while next_page:
     # print(links)
 
     for item in links:
+        genres.clear()
         item_title = item.find("a").text
         item_href = item.find("a").attrs["href"]
         item_lang = item.find("span").text
+        item_genres = item.find("div", {"class": "search_genre"}).findAll("a")
 
         if item_title and item_href and item_lang:
             if item_lang == 'JP':
                 print("\nTitle:", item_title)
                 print("Link:", item_href)
                 print("Original Language:", item_lang)
+                for genre in item_genres:
+                    data_genre = genre.text
+                    genres.append(data_genre)
+                print("Genres:", genre)
 
-                data = getLNData(item_href, headers, item_title)
-                cursor = db.inventory.find({"Title": item_title})
-
-                # can use cursor.count() to get number of docs that matches the find()
-                curlist = list(cursor)
-                if len(curlist) == 0:
-                    db.inventory.insert_one(data)
+                db.inventory.update_one({"Title": item_title}, {
+                                        "$set": {"Genres": genres, "url": item_href}})
+                item = db.inventory.find({"Title": item_title})
+                for data in item:
                     pprint(data)
-                    print("added data")
-                else:
-                    db.inventory.update_one(
-                        {"Title": item_title}, {"$set": data})
-                    print("updated data")
-                delay(1, 5)
+                print("Added genre and url")
+                # can use cursor.count() to get number of docs that matches the find()
+                # curlist = list(cursor)
+                # if len(curlist) == 0:
+                #     db.inventory.insert_one(data)
+                #     pprint(data)
+                #     print("added data")
+                # else:
+                #     db.inventory.update_one(
+                #         {"Title": item_title}, {"$set": data})
+                #     print("updated data")
+                # delay(1, 5)
     try:
         pages = soup.find("div", {"class": "digg_pagination"}).find(
             "a", {"class": "next_page"}).attrs["href"]
@@ -64,6 +75,3 @@ while next_page:
 
     i += 1
     delay(15, 20)
-
-
-# db path for running the mongodb server\
